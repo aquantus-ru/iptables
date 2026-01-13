@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iptables Visualizer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .table-container { margin-bottom: 2rem; }
+      .chain-header { background-color: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 1rem; }
+      .rule-row { font-family: monospace; }
+      body { padding-bottom: 50px; }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 rounded">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="/">Iptables Manager</a>
+            <div class="collapse navbar-collapse">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/add_rule">Add Rule</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/generate">Generate Config</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+      </nav>
+
+      {% block content %}{% endblock %}
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

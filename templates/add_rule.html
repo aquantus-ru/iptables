@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2>Add New Rule</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/add_rule">
+
+                    <div class="mb-3">
+                        <label for="table" class="form-label">Table</label>
+                        <select class="form-select" id="table" name="table" required onchange="updateChains()">
+                            {% for table in tables %}
+                            <option value="{{ table }}">{{ table }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="chain" class="form-label">Chain</label>
+                        <select class="form-select" id="chain" name="chain" required>
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="protocol" class="form-label">Protocol (-p)</label>
+                            <select class="form-select" id="protocol" name="protocol">
+                                <option value="">Any</option>
+                                <option value="tcp">TCP</option>
+                                <option value="udp">UDP</option>
+                                <option value="icmp">ICMP</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="jump" class="form-label">Target (-j)</label>
+                            <input type="text" class="form-control" id="jump" name="jump" placeholder="ACCEPT, DROP, DNAT, etc." required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="source" class="form-label">Source (-s)</label>
+                            <input type="text" class="form-control" id="source" name="source" placeholder="192.168.1.0/24">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="destination" class="form-label">Destination (-d)</label>
+                            <input type="text" class="form-control" id="destination" name="destination" placeholder="10.0.0.1">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="in_interface" class="form-label">In Interface (-i)</label>
+                            <input type="text" class="form-control" id="in_interface" name="in_interface" placeholder="eth0">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="out_interface" class="form-label">Out Interface (-o)</label>
+                            <input type="text" class="form-control" id="out_interface" name="out_interface" placeholder="eth0">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="sport" class="form-label">Source Port (--sport)</label>
+                            <input type="text" class="form-control" id="sport" name="sport" placeholder="80">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dport" class="form-label">Dest Port (--dport)</label>
+                            <input type="text" class="form-control" id="dport" name="dport" placeholder="443">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="extra_options" class="form-label">Extra Options</label>
+                        <input type="text" class="form-control" id="extra_options" name="extra_options" placeholder="--to-destination 10.0.0.2:80">
+                        <div class="form-text">Any other flags or options not covered above.</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Rule</button>
+                    <a href="/" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tableData = {{ table_chains_json | safe }};
+
+    function updateChains() {
+        const tableSelect = document.getElementById('table');
+        const chainSelect = document.getElementById('chain');
+        const selectedTable = tableSelect.value;
+
+        chainSelect.innerHTML = '';
+
+        if (tableData[selectedTable]) {
+            tableData[selectedTable].forEach(chain => {
+                const option = document.createElement('option');
+                option.value = chain;
+                option.text = chain;
+                chainSelect.appendChild(option);
+            });
+        }
+    }
+
+    // Initialize
+    updateChains();
+</script>
+{% endblock %}
